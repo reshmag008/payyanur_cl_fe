@@ -248,7 +248,7 @@ useEffect(() => {
             </p>
 
             <h2 className="mt-1 text-2xl lg:text-3xl xl:text-4xl font-black text-white tracking-wide">
-              KCC Veterans 37+ Premier Dhamaka League
+              Payyannur Cricket League
             </h2>
 
           </div>

@@ -157,7 +157,7 @@ const [approvingPlayerId, setApprovingPlayerId] = useState<number | null>(null);
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6">
             <div className="text-center sm:text-left">
               <h1 className="font-heading font-extrabold text-2xl sm:text-3xl md:text-4xl mb-1 sm:mb-2">
-                KCC Veterans 37+ Premier Dhamaka League - Player Roster
+                Payyannur Cricket League - Player Roster
               </h1>
               <p className="text-primary-foreground/80 text-sm sm:text-lg">
                 {players ? players.length : 0} {players &&players.length === 1 ? 'player' : 'players'} registered for auction
