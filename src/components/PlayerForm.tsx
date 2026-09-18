@@ -558,7 +558,7 @@ const [paymentPreview, setPaymentPreview] = useState("");
           </div>
 
           {/* Jersey Name */}
-          {/* <div className="space-y-1.5 sm:space-y-2">
+          <div className="space-y-1.5 sm:space-y-2">
             <Label htmlFor="contact" className="flex items-center gap-2 text-xs sm:text-sm font-semibold">
               <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" />
               Jersey Name
@@ -570,10 +570,10 @@ const [paymentPreview, setPaymentPreview] = useState("");
               placeholder="Enter Jersey Name"
               className={inputClasses}
             />
-          </div> */}
+          </div>
 
           {/* Jersey No */}
-          {/* <div className="space-y-1.5 sm:space-y-2">
+          <div className="space-y-1.5 sm:space-y-2">
             <Label htmlFor="contact" className="flex items-center gap-2 text-xs sm:text-sm font-semibold">
               <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" />
               Jersey Number
@@ -585,10 +585,10 @@ const [paymentPreview, setPaymentPreview] = useState("");
               placeholder="Enter Jersey No"
               className={inputClasses}
             />
-          </div> */}
+          </div>
 
           {/* Jersey Size */}
-          {/* <div className="space-y-1.5 sm:space-y-2">
+          <div className="space-y-1.5 sm:space-y-2">
             <Label className="flex items-center gap-2 text-xs sm:text-sm font-semibold">
               <Target className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" />
               Jersey Size*
@@ -608,7 +608,7 @@ const [paymentPreview, setPaymentPreview] = useState("");
                 ))}
               </SelectContent>
             </Select>
-          </div> */}
+          </div>
 
 
 
