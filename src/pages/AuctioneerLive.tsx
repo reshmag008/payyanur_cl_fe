@@ -254,11 +254,13 @@ const sellPlayer = () => {
         setBidFlow([]);
         setBidAmount(0);
         setCurrentBidTeam({})
+        GetAllPlayers();
         if (response.data && response.data.player_count === TOTAL_PLAYER) {
           localStorage.setItem("team_complete",JSON.stringify(response.data))
           InvokeTeamComplete(response.data)
           setOpenPopUp(true);
           setPopUpContent(response.data);
+          
         }
       })
     } else {
@@ -299,6 +301,7 @@ const sellPlayer = () => {
        console.log("response== ", response);
        if (response && response.data && response.data.length && response.data[0] > 0) {
          GetPlayer();
+         GetAllPlayers();
        } else {
          toast.success("Unsold players not found");
        }
@@ -367,6 +370,7 @@ const sellPlayer = () => {
       PlayerService().setUnsoldPlayer(params).then((response: any) => {
         console.log("response== ", response.data);
         GetPlayer();
+        GetAllPlayers();
       })
     }
 

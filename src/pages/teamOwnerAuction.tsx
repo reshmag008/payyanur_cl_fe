@@ -777,7 +777,7 @@ const LiveAuctionTeam: React.FC = () => {
                   </p>
 
                   <p className="mt-1 text-xl font-black">
-                    {(remainingPurse)}
+                    {(remainingPurse)}({teamData.player_count}/{TOTAL_PLAYER})
                   </p>
                 </div>
 
