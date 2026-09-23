@@ -443,7 +443,7 @@ const LiveAuction: React.FC = () => {
 
 {auctionStatus == 'LIVE' && 
 
-        <section className="grid grid-cols-3 gap-2 sm:gap-3">
+  <section className="grid grid-cols-3 gap-2 sm:gap-3">
       <div className="relative overflow-hidden rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 sm:px-4 sm:py-3">
   <div className="flex items-center justify-between gap-2">
     <div>

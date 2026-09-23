@@ -65,6 +65,14 @@ export const PlayerService = () => ({
         return(axios.post(BACKEND_URL + "/team_complete", teamData))
     },
 
+    EmitCurrentBid: (bidData :any)=>{
+        return(axios.post(BACKEND_URL + "/emit_current_bid", bidData))
+    },
+
+    EmitCallStage: (callStage :any)=>{
+        return(axios.post(BACKEND_URL + "/emit_call_stage", callStage))
+    },
+
     closePopup: ()=>{
         return(axios.post(BACKEND_URL + "/close_popup"))
     },
@@ -83,7 +91,11 @@ export const PlayerService = () => ({
 
     PlayerImageGoogleStorageCloudUpload : (formData:any) => {
         return(axios.post(BACKEND_URL + "/gcsupload", formData))
-    }
+    },
+
+     getCurrentPlayer : () =>{
+        return(axios.get(BACKEND_URL + "/get_current_player"))
+    },
 
 
 });
