@@ -53,6 +53,7 @@ const LiveAuctionTeam: React.FC = () => {
   const [bidHistory, setBidHistory] = useState([]);
   const [showCallAnimation, setShowCallAnimation] = useState(false);
   const [callStage, setCallStage] = useState("1st Call");
+  const [buttonDisable, setButtonDisable]= useState(false)
 
   const myTeam = teamData.team_name
   const purse = teamData.total_points;
@@ -424,6 +425,7 @@ const LiveAuctionTeam: React.FC = () => {
 
 
   const placeBid = async () => {
+    setButtonDisable(true);
     if (nextBid > max_bid) {
       alert("Insufficient purse!");
       return;
@@ -454,6 +456,8 @@ const LiveAuctionTeam: React.FC = () => {
       },
       ...prev,
     ]);
+
+     setButtonDisable(false);
 
     // Reset auction timer
     // setTimeLeft(10);
@@ -810,12 +814,14 @@ const LiveAuctionTeam: React.FC = () => {
               <button
                 onClick={placeBid}
                 disabled={
+                  buttonDisable ||
                   currentBid?.team_name == teamData.team_name ||
                   nextBid > max_bid ||
                   timeLeft <= 0
                 }
                 className={`w-full rounded-2xl py-5 text-lg font-black transition ${
                   currentBid?.team_name == teamData.team_name ||
+                  buttonDisable ||
                   nextBid > max_bid ||
                   timeLeft <= 0
                     ? "cursor-not-allowed bg-slate-700 text-slate-500"
