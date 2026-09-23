@@ -9,6 +9,7 @@ import {
   Trophy,
   Clock3,
   CircleDollarSign,
+  User,
 } from "lucide-react";
 import PlayerService from "@/service/PlayerService";
 import { io } from "socket.io-client";
@@ -54,6 +55,8 @@ const LiveAuctionTeam: React.FC = () => {
   const [showCallAnimation, setShowCallAnimation] = useState(false);
   const [callStage, setCallStage] = useState("1st Call");
   const [buttonDisable, setButtonDisable]= useState(false)
+  const [activeTab, setActiveTab] = useState("teams");
+  const [auctionedPlayers, setAuctionedPlayers] = useState([])
 
   const myTeam = teamData.team_name
   const purse = teamData.total_points;
@@ -386,12 +389,13 @@ const LiveAuctionTeam: React.FC = () => {
       try {
         let params = {
           offset: 0,
-          teamId: null
+          teamId: teamData.id
         }
         PlayerService().getAllPlayers(params).then((response: any) => {
           setSoldCount(response?.data?.soldPlayerCount);
           setUnSoldCount(response?.data?.unSoldPlayerCount);
           setPendingCount(response?.data?.pendingPlayerCount);
+          setAuctionedPlayers(response?.data?.players)
   
           if(response?.data?.unSoldPlayerCount==0 && response?.data?.pendingPlayerCount==0){
               setAuctionStatus("COMPLETE");
@@ -899,6 +903,236 @@ const LiveAuctionTeam: React.FC = () => {
               </div>
 
             </div> 
+
+
+            {/* Team / Auctioned Players Section */}
+
+
+<div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-[#0b0b0f] shadow-2xl">
+
+  {/* Tabs */}
+  <div className="border-b border-white/10 bg-black/50">
+    <div className="flex">
+
+      <button
+        type="button"
+        onClick={() => setActiveTab("teams")}
+        className={`
+          relative flex-1 px-4 py-4 text-sm font-bold transition-all
+          ${
+            activeTab === "teams"
+              ? "bg-white/[0.04] text-white"
+              : "text-gray-500 hover:text-gray-300"
+          }
+        `}
+      >
+        <div className="flex items-center justify-center gap-2">
+          <Users className="h-4 w-4" />
+          <span>Teams</span>
+
+          <span className="flex h-5 min-w-[22px] items-center justify-center rounded-full bg-white/10 px-1.5 text-[10px]">
+            {allTeams?.length || 0}
+          </span>
+        </div>
+
+        {activeTab === "teams" && (
+          <span className="absolute bottom-0 left-6 right-6 h-[2px] bg-yellow-400" />
+        )}
+      </button>
+
+
+      <button
+        type="button"
+        onClick={() => setActiveTab("players")}
+        className={`
+          relative flex-1 px-4 py-4 text-sm font-bold transition-all
+          ${
+            activeTab === "players"
+              ? "bg-white/[0.04] text-white"
+              : "text-gray-500 hover:text-gray-300"
+          }
+        `}
+      >
+        <div className="flex items-center justify-center gap-2">
+          <Trophy className="h-4 w-4" />
+          <span>Auctioned Players</span>
+
+          <span className="flex h-5 min-w-[22px] items-center justify-center rounded-full bg-white/10 px-1.5 text-[10px]">
+            {auctionedPlayers?.length || 0}
+          </span>
+        </div>
+
+        {activeTab === "players" && (
+          <span className="absolute bottom-0 left-6 right-6 h-[2px] bg-yellow-400" />
+        )}
+      </button>
+
+    </div>
+  </div>
+
+
+  {/* Content */}
+  <div className="p-4 sm:p-6">
+
+    {/* Teams */}
+    {activeTab === "teams" && (
+      <>
+        <div className="mb-5 flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-bold text-white">
+              Teams
+            </h2>
+
+            <p className="mt-1 text-xs text-gray-500">
+              View participating teams
+            </p>
+          </div>
+
+          <span className="rounded-lg border border-yellow-400/20 bg-yellow-400/10 px-3 py-1.5 text-xs font-bold text-yellow-400">
+            {allTeams?.length || 0} Teams
+          </span>
+        </div>
+
+
+        {allTeams?.length > 0 ? (
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+
+            {allTeams.map((team) => (
+              <div
+                key={team.id}
+                className="group flex items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.03] p-4 transition-all hover:border-yellow-400/20 hover:bg-white/[0.06]"
+              >
+                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl border border-yellow-400/20 bg-yellow-500/10 font-black text-yellow-400">
+                  {team.team_name?.charAt(0)?.toUpperCase()}
+                </div>
+
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-bold text-gray-100">
+                    {team.team_name}
+                  </p>
+
+                  <p className="mt-1 text-[10px] uppercase tracking-wider text-gray-600">
+                    Team
+                  </p>
+                </div>
+
+                <div className="flex-shrink-0 text-right">
+                  <p className="text-[9px] uppercase tracking-wider text-gray-600">
+                    Max Bid
+                  </p>
+
+                  <p className="mt-0.5 text-sm font-black text-yellow-400">
+                    ₹{Number(team.max_bid_amount || 0).toLocaleString("en-IN")}
+                  </p>
+                </div>
+              </div>
+            ))}
+
+          </div>
+        ) : (
+          <div className="py-12 text-center text-sm text-gray-600">
+            No teams available
+          </div>
+        )}
+      </>
+    )}
+
+
+    {/* Auctioned Players */}
+    {activeTab === "players" && (
+      <>
+        <div className="mb-5 flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-bold text-white">
+              Auctioned Players
+            </h2>
+
+            <p className="mt-1 text-xs text-gray-500">
+              Players selected during the auction
+            </p>
+          </div>
+
+          <span className="rounded-lg border border-green-400/20 bg-green-400/10 px-3 py-1.5 text-xs font-bold text-green-400">
+            {auctionedPlayers?.length || 0} Players
+          </span>
+        </div>
+
+
+        {auctionedPlayers?.length > 0 ? (
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+
+            {auctionedPlayers.map((player) => (
+              <div
+                key={player.id}
+                className="group flex items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.03] p-3 transition-all hover:border-yellow-400/20 hover:bg-white/[0.06]"
+              >
+                {/* Image */}
+                <div className="h-14 w-14 flex-shrink-0 overflow-hidden rounded-xl border border-white/10 bg-white/[0.05]">
+                  {player.profile_image ? (
+                    <img
+                      src={`https://storage.googleapis.com/rajas_pl/${player.profile_image}`}
+                      alt={player.fullname}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center">
+                      <User className="h-7 w-7 text-gray-600" />
+                    </div>
+                  )}
+                </div>
+
+
+                {/* Details */}
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-bold text-gray-100">
+                    {player.fullname}
+                  </p>
+
+                  <p className="mt-0.5 truncate text-xs text-gray-500">
+                    {player.player_role}
+                  </p>
+
+                  {player.team_name && (
+                    <p className="mt-1 truncate text-[11px] font-semibold text-yellow-400">
+                      {player.team_name}
+                    </p>
+                  )}
+                </div>
+
+
+                {/* Bid */}
+                {player.bid_amount && (
+                  <div className="flex-shrink-0 text-right">
+                    <p className="text-[9px] uppercase tracking-wider text-gray-600">
+                      Sold
+                    </p>
+
+                    <p className="mt-0.5 text-sm font-black text-green-400">
+                      ₹{Number(player.bid_amount).toLocaleString("en-IN")}
+                    </p>
+                  </div>
+                )}
+
+              </div>
+            ))}
+
+          </div>
+        ) : (
+          <div className="py-12 text-center text-sm text-gray-600">
+            No players auctioned yet
+          </div>
+        )}
+      </>
+    )}
+
+  </div>
+</div>
+
+
+
+
+
+
 
           </aside>
 
