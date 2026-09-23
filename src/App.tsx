@@ -39,6 +39,7 @@ const AppContent = () => {
   "/player-display",
   "/auctioneer_live",
   "/team_owner_auction",
+  "/join_auction"
 ];
 
 const hideHeader = headerHiddenRoutes.includes(location.pathname);
