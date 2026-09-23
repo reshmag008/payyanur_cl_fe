@@ -182,6 +182,7 @@ const LiveAuctionTeam: React.FC = () => {
             // setCurrentBid(message)
             setCurrentBid(messageData);
             GetBidHistory(currentBidPlayer)
+            setButtonDisable(false)
           })
 
           // socket.on('time_left', (timer: any) => {
@@ -442,9 +443,13 @@ const LiveAuctionTeam: React.FC = () => {
 
     let currentBid = {player_id: currentBidPlayer.id ,player_name : currentBidPlayer.fullname,team_id:teamData.id, 'team_name' :teamData.team_name, 'bid_amount':nextBid }
 
+
+    socket.emit('current_bid', JSON.stringify(currentBid))
+
     await SaveBidHistory(currentBid);
 
-    await PlayerService().EmitCurrentBid(currentBid).then((response: any) => {})
+
+    // await PlayerService().EmitCurrentBid(currentBid).then((response: any) => {})
     GetBidHistory(currentBidPlayer)
 
     if (currentTeam === myTeam) {
