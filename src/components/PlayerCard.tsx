@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { User, MapPin, Crosshair, Target, Pencil, Trash2 } from 'lucide-react';
+import { User, MapPin, Crosshair, Target, Pencil, Trash2,Phone } from 'lucide-react';
 import { Player } from '@/types/player';
 import { Button } from '@/components/ui/button';
 import {
@@ -55,79 +55,241 @@ const PlayerCard = ({ player }: PlayerCardProps) => {
 
   return (
     <>
-      <div className="bg-card rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 overflow-hidden group animate-scale-in border border-border">
-        {/* Player Image */}
-        <div className="relative h-36 sm:h-48 bg-gradient-to-br from-muted to-muted/50 overflow-hidden">
-          {player.profile_image ? (
-            <img
-              src={`https://storage.googleapis.com/rajas_pl/${player.profile_image}`}
-              alt={player.fullname}
-              // className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              className="group relative hover:shadow-2xl transition-all duration-300"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <User className="w-16 h-16 sm:w-20 sm:h-20 text-muted-foreground/30" />
-            </div>
-          )}
-          {/* Role Badge */}
-          <div className={`absolute top-2 right-2 sm:top-3 sm:right-3 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold ${getRoleBadgeColor(player.player_role)}`}>
-            {player.player_role}
-          </div>
-        </div>
+      
+<div className="group bg-card rounded-2xl border border-border overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
 
-        {/* Player Info */}
-        <div className="p-3 sm:p-5">
-          <h3 className="font-heading font-bold text-base sm:text-lg text-foreground mb-2 sm:mb-3 truncate">
-            {player.id}. {player.fullname}
-          </h3>
+  {/* Player Image */}
+  <div className="relative h-52 sm:h-64 bg-gradient-to-br from-indigo-500/20 via-purple-500/10 to-pink-500/20 flex items-center justify-center overflow-hidden">
 
-          <div className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm">
-            {player.location && (
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                <span className="truncate">{player.location}</span>
-              </div>
-            )}
-
-            {player.batting_style && (
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <Crosshair className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-secondary flex-shrink-0" />
-                <span className="truncate">{player.batting_style}</span>
-              </div>
-            )}
-
-            {player.bowling_style && player.bowling_style !== 'None' && (
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <Target className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-pitch-light flex-shrink-0" />
-                <span className="truncate">{player.bowling_style}</span>
-              </div>
-            )}
-          </div>
-
-          {/* Action Buttons */}
-          {/* <div className="flex gap-2 mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-border">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowEditDialog(true)}
-              className="flex-1 h-8 sm:h-9 text-xs sm:text-sm border-2 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all"
-            >
-              <Pencil className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1" />
-              Edit
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowDeleteDialog(true)}
-              className="flex-1 h-8 sm:h-9 text-xs sm:text-sm border-2 border-destructive/30 text-destructive hover:bg-destructive hover:text-destructive-foreground hover:border-destructive transition-all"
-            >
-              <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1" />
-              Delete
-            </Button>
-          </div> */}
+    {player.profile_image ? (
+      <img
+        src={`https://storage.googleapis.com/rajas_pl/${player.profile_image}`}
+        alt={player.fullname}
+        className="w-full h-full object-contain p-2 transition-transform duration-300 group-hover:scale-[1.02]"
+      />
+    ) : (
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="w-24 h-24 rounded-full bg-gradient-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center">
+          <User className="w-14 h-14 text-indigo-400/60" />
         </div>
       </div>
+    )}
+
+    {/* Bottom gradient */}
+    <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
+
+    {/* Player Number */}
+    <div className="
+      absolute top-3 left-3
+      w-10 h-10
+      rounded-full
+      bg-gradient-to-br from-indigo-600 to-purple-600
+      text-white
+      flex items-center justify-center
+      text-sm font-bold
+      shadow-lg
+      border border-white/20
+    ">
+      {player.id}
+    </div>
+
+    {/* Role Badge */}
+    <div
+      className={`
+        absolute top-3 right-3
+        px-3 py-1.5
+        rounded-full
+        text-[11px]
+        font-bold
+        shadow-lg
+        backdrop-blur-sm
+        border border-white/20
+        ${getRoleBadgeColor(player.player_role)}
+      `}
+    >
+      {player.player_role}
+    </div>
+
+    {/* Player Name */}
+    <div className="absolute bottom-3 left-4 right-4">
+      <h3 className="
+        font-heading
+        font-bold
+        text-lg sm:text-xl
+        text-white
+        truncate
+        drop-shadow-lg
+      ">
+        {player.fullname}
+      </h3>
+    </div>
+  </div>
+
+
+  {/* Player Details */}
+  <div className="p-4 sm:p-5">
+
+    {/* Location */}
+    {player.location && (
+      <div className="
+        flex items-center gap-3
+        rounded-xl
+        px-3 py-2.5
+        mb-2
+        bg-gradient-to-r from-blue-500/10 to-cyan-500/10
+        border border-blue-500/15
+      ">
+        <div className="
+          w-8 h-8
+          rounded-lg
+          bg-blue-500
+          flex items-center justify-center
+          flex-shrink-0
+          shadow-sm
+        ">
+          <MapPin className="w-4 h-4 text-white" />
+        </div>
+
+        <div className="min-w-0">
+          <p className="text-[9px] uppercase tracking-wider text-blue-600 dark:text-blue-400 font-bold">
+            Location
+          </p>
+          <span className="text-sm text-foreground font-medium truncate block">
+            {player.location}
+          </span>
+        </div>
+      </div>
+    )}
+
+
+    {/* Contact Number */}
+    {player.contact_no && (
+      <div className="
+        flex items-center gap-3
+        rounded-xl
+        px-3 py-2.5
+        mb-4
+        bg-gradient-to-r from-emerald-500/10 to-green-500/10
+        border border-emerald-500/15
+      ">
+        <div className="
+          w-8 h-8
+          rounded-lg
+          bg-emerald-500
+          flex items-center justify-center
+          flex-shrink-0
+          shadow-sm
+        ">
+          <Phone className="w-4 h-4 text-white" />
+        </div>
+
+        <div className="min-w-0">
+          <p className="text-[9px] uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-bold">
+            Contact
+          </p>
+          <span className="text-sm text-foreground font-medium truncate block">
+            {player.contact_no}
+          </span>
+        </div>
+      </div>
+    )}
+
+
+    {/* Player Attributes */}
+    <div className="grid grid-cols-2 gap-3">
+
+      {/* Batting */}
+      {player.batting_style && (
+        <div className="
+          relative overflow-hidden
+          rounded-xl
+          p-3
+          bg-gradient-to-br from-orange-500 to-red-500
+          text-white
+          shadow-md
+          shadow-orange-500/20
+        ">
+
+          {/* Decorative circle */}
+          <div className="
+            absolute -right-5 -top-5
+            w-16 h-16
+            rounded-full
+            bg-white/10
+          " />
+
+          <div className="relative z-10">
+            <div className="
+              w-8 h-8
+              rounded-lg
+              bg-white/20
+              flex items-center justify-center
+              mb-2
+            ">
+              <Crosshair className="w-4 h-4" />
+            </div>
+
+            <p className="text-[9px] uppercase tracking-wider text-white/70 font-bold">
+              Batting
+            </p>
+
+            <p className="text-xs sm:text-sm font-bold truncate mt-0.5">
+              {player.batting_style}
+            </p>
+          </div>
+        </div>
+      )}
+
+
+      {/* Bowling */}
+      {player.bowling_style &&
+        player.bowling_style !== "None" && (
+          <div className="
+            relative overflow-hidden
+            rounded-xl
+            p-3
+            bg-gradient-to-br from-violet-500 to-purple-600
+            text-white
+            shadow-md
+            shadow-purple-500/20
+          ">
+
+            {/* Decorative circle */}
+            <div className="
+              absolute -right-5 -top-5
+              w-16 h-16
+              rounded-full
+              bg-white/10
+            " />
+
+            <div className="relative z-10">
+              <div className="
+                w-8 h-8
+                rounded-lg
+                bg-white/20
+                flex items-center justify-center
+                mb-2
+              ">
+                <Target className="w-4 h-4" />
+              </div>
+
+              <p className="text-[9px] uppercase tracking-wider text-white/70 font-bold">
+                Bowling
+              </p>
+
+              <p className="text-xs sm:text-sm font-bold truncate mt-0.5">
+                {player.bowling_style}
+              </p>
+            </div>
+          </div>
+        )}
+
+    </div>
+
+  </div>
+</div>
+
+
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
