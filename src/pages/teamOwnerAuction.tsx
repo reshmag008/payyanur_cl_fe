@@ -24,7 +24,9 @@ const LiveAuctionTeam: React.FC = () => {
 
   const location = useLocation();
 
-  const teamData  = location.state?.teamData || {};
+  let teamData  = location.state?.teamData || JSON.parse(localStorage.getItem('teamData') || '{}');
+
+  localStorage.setItem("teamData", JSON.stringify(teamData))
 
     const [openTeam, setOpenTeam] = useState<string | null>(null);
     const isMobile = window.innerWidth < 768;
@@ -65,6 +67,11 @@ const LiveAuctionTeam: React.FC = () => {
   
 
     useEffect(() => {
+
+      if(!teamData?.id){
+        console.log("taking from local storage")
+        teamData = JSON.parse(localStorage.getItem('teamData') || '{}')
+      }
 
       if(currentBid && currentBid.bid_amount){
         setNextBid(currentBid.bid_amount + baseAmount)
@@ -600,7 +607,7 @@ const LiveAuctionTeam: React.FC = () => {
             </h1>
 
             <p className="text-xs text-slate-400 sm:text-sm">
-              All Kerala Kannur Premier League
+              Payyannur Cricket League
             </p>
           </div>
 
@@ -661,36 +668,7 @@ const LiveAuctionTeam: React.FC = () => {
 </section>
 
 
-          <div className="flex items-center gap-3">
-
-            {/* Connection */}
-            {/* <div
-              className={`flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold ${
-                isConnected
-                  ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
-                  : "border-red-500/30 bg-red-500/10 text-red-400"
-              }`}
-            >
-              <span
-                className={`h-2 w-2 rounded-full ${
-                  isConnected ? "bg-emerald-400" : "bg-red-400"
-                }`}
-              />
-
-              {isConnected ? "Connected" : "Reconnecting..."}
-            </div> */}
-
-            <div className="hidden rounded-xl bg-slate-800 px-4 py-2 text-right sm:block">
-              <p className="text-[10px] uppercase text-slate-400">
-                Your Team
-              </p>
-
-              <p className="font-bold">
-                {myTeam}
-              </p>
-            </div>
-
-          </div>
+          
         </div>
       </header>
 
@@ -709,24 +687,10 @@ const LiveAuctionTeam: React.FC = () => {
               </span>
 
               <span className="text-sm text-slate-400">
-                Player currently in auction
+                {teamData.team_name}
               </span>
             </div>
-
-            <h2 className="text-xl font-bold sm:text-2xl">
-              Player Auction
-            </h2>
           </div>
-
-          {/* <div className="hidden text-right sm:block">
-            <p className="text-xs text-slate-500">
-              PLAYER ID
-            </p>
-
-            <p className="text-lg font-black text-orange-400">
-              #{currentBidPlayer.id}
-            </p>
-          </div> */}
 
         </div>
 
@@ -736,98 +700,125 @@ const LiveAuctionTeam: React.FC = () => {
          
           {/* ================= PLAYER CARD ================= */}
            {currentBidPlayer && currentBidPlayer.id &&
-          <section className="overflow-hidden rounded-3xl border border-slate-800 bg-slate-900 shadow-2xl">
+         <section className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 shadow-xl">
 
-            {/* Player image */}
-            <div className="relative h-[430px] overflow-hidden bg-slate-950 sm:h-[500px]">
+  {/* Player Image */}
+  <div className="relative h-[360px] overflow-hidden bg-slate-950 sm:h-[420px]">
 
-  <img
-    src={`https://storage.googleapis.com/rajas_pl/${currentBidPlayer.profile_image}`}
-    alt={currentBidPlayer.fullname}
-    className="h-full w-full object-contain"
-  />
+    <img
+      src={`https://storage.googleapis.com/rajas_pl/${currentBidPlayer.profile_image}`}
+      alt={currentBidPlayer.fullname}
+      className="h-full w-full object-contain"
+    />
 
-  {/* Gradient */}
-  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent pointer-events-none" />
+    {/* Bottom Gradient */}
+    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent" />
 
-  {/* Player ID */}
-  <div className="absolute left-5 top-5 rounded-xl bg-black/60 px-4 py-2 backdrop-blur">
-    <p className="text-[10px] uppercase tracking-widest text-slate-400">
-      Player ID
-    </p>
-
-    <p className="font-black text-orange-400">
-      #{currentBidPlayer.id}
-    </p>
-  </div>
-
-  {/* Timer */}
-  {/* <div className="absolute right-5 top-5">
-    <div
-      className={`flex h-16 w-16 flex-col items-center justify-center rounded-full border-4 ${
-        timeLeft <= 3
-          ? "border-red-500 bg-red-500/20"
-          : "border-orange-400 bg-orange-500/20"
-      }`}
-    >
-      <span className="text-xl font-black">
-        {timeLeft}
-      </span>
-
-      <span className="text-[8px] uppercase text-slate-300">
-        seconds
-      </span>
+    {/* Player ID */}
+    <div className="absolute left-4 top-4 rounded-lg bg-black/60 px-3 py-1.5 backdrop-blur">
+      <p className="text-[9px] uppercase tracking-widest text-slate-400">
+        Player ID
+      </p>
+      <p className="text-sm font-black text-orange-400">
+        #{currentBidPlayer.id}
+      </p>
     </div>
-  </div> */}
 
-  {/* Player info */}
-  <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-7">
+    {/* Player Info Overlay */}
+    <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
 
-    <span className="rounded-full bg-orange-500/20 px-3 py-1 text-xs font-bold text-orange-400">
-      {currentBidPlayer.player_role}
-    </span>
+      {/* Role */}
+      <span className="inline-block rounded-full bg-orange-500/20 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-orange-400">
+        {currentBidPlayer.player_role}
+      </span>
 
-    <h3 className="mt-2 text-3xl font-black sm:text-5xl">
-      {currentBidPlayer.fullname}
-    </h3>
+      {/* Name */}
+      <h3 className="mt-1 text-2xl font-black leading-tight text-white sm:text-3xl">
+        {currentBidPlayer.fullname}
+      </h3>
 
-    <p className="mt-1 text-sm text-slate-300">
-      📍 {currentBidPlayer.location}
-    </p>
+      {/* Location */}
+      <p className="mt-1 text-xs text-slate-300">
+        📍 {currentBidPlayer.location}
+      </p>
 
+      {/* Details */}
+      <div className="mt-3 grid grid-cols-3 gap-2">
+
+        <div className="rounded-lg bg-black/50 px-2 py-2 backdrop-blur">
+          <p className="text-[8px] uppercase tracking-wider text-slate-400">
+            Batting
+          </p>
+          <p className="mt-0.5 truncate text-[11px] font-bold text-white">
+            {currentBidPlayer.batting_style || "-"}
+          </p>
+        </div>
+
+        <div className="rounded-lg bg-black/50 px-2 py-2 backdrop-blur">
+          <p className="text-[8px] uppercase tracking-wider text-slate-400">
+            Bowling
+          </p>
+          <p className="mt-0.5 truncate text-[11px] font-bold text-white">
+            {currentBidPlayer.bowling_style || "-"}
+          </p>
+        </div>
+
+        <div className="rounded-lg bg-black/50 px-2 py-2 backdrop-blur">
+          <p className="text-[8px] uppercase tracking-wider text-slate-400">
+            Jersey
+          </p>
+          <p className="mt-0.5 text-[11px] font-bold text-white">
+            {currentBidPlayer.jersey_no || "-"}
+          </p>
+        </div>
+
+      </div>
+
+    </div>
   </div>
 
-</div>
-
-
-            {/* Player details */}
-            <div className="grid grid-cols-2 border-t border-slate-800 sm:grid-cols-3">
-
-              
-
-              <Info
-                label="Batting"
-                value={currentBidPlayer.batting_style}
-              />
-
-              <Info
-                label="Bowling"
-                value={currentBidPlayer.bowling_style}
-              />
-
-              <Info
-                label="Role"
-                value={currentBidPlayer.player_role}
-              />
-
-            </div>
-
-          </section>
+</section>
           }
 
 
           {/* ================= BIDDING PANEL ================= */}
           <aside className="space-y-4">
+
+            {/* Bid button */}
+            {auctionStatus !== "TEAM COMPLETE" && 
+            <div className="rounded-3xl border border-slate-800 bg-slate-900 p-5">
+
+              <p className="mb-2 text-center text-xs uppercase text-slate-500">
+                Next Bid : {(nextBid)}
+              </p>
+             
+              <button
+                onClick={placeBid}
+                disabled={
+                  buttonDisable ||
+                  currentBid?.team_name == teamData.team_name ||
+                  nextBid > max_bid ||
+                  timeLeft <= 0
+                }
+                className={`w-full rounded-2xl py-5 text-lg font-black transition ${
+                  currentBid?.team_name == teamData.team_name ||
+                  buttonDisable ||
+                  nextBid > max_bid ||
+                  timeLeft <= 0
+                    ? "cursor-not-allowed bg-slate-700 text-slate-500"
+                    : "bg-orange-500 text-white shadow-lg shadow-orange-500/20 hover:bg-orange-400 active:scale-[0.98]"
+                }`}
+              >
+                {currentBid?.team_name == teamData.team_name
+                  ? "YOU ARE HIGHEST BIDDER"
+                  : timeLeft <= 0
+                  ? "BIDDING CLOSED"
+                  : `BID ${(nextBid)}`}
+              </button>
+
+            </div> 
+            }
+
 
             {/* Current bid */}
             <div className="rounded-3xl border border-orange-500/30 bg-gradient-to-br from-orange-500/10 to-slate-900 p-6">
@@ -885,49 +876,7 @@ const LiveAuctionTeam: React.FC = () => {
             </div>
 
 
-            {/* Bid button */}
-            {auctionStatus !== "TEAM COMPLETE" && 
-            <div className="rounded-3xl border border-slate-800 bg-slate-900 p-5">
-
-              <p className="mb-2 text-center text-xs uppercase text-slate-500">
-                Next Bid
-              </p>
-
-              <p className="mb-4 text-center text-2xl font-black">
-                {(nextBid)}
-              </p>
-             
-             
-              <button
-                onClick={placeBid}
-                disabled={
-                  buttonDisable ||
-                  currentBid?.team_name == teamData.team_name ||
-                  nextBid > max_bid ||
-                  timeLeft <= 0
-                }
-                className={`w-full rounded-2xl py-5 text-lg font-black transition ${
-                  currentBid?.team_name == teamData.team_name ||
-                  buttonDisable ||
-                  nextBid > max_bid ||
-                  timeLeft <= 0
-                    ? "cursor-not-allowed bg-slate-700 text-slate-500"
-                    : "bg-orange-500 text-white shadow-lg shadow-orange-500/20 hover:bg-orange-400 active:scale-[0.98]"
-                }`}
-              >
-                {currentBid?.team_name == teamData.team_name
-                  ? "YOU ARE HIGHEST BIDDER"
-                  : timeLeft <= 0
-                  ? "BIDDING CLOSED"
-                  : `BID ${(nextBid)}`}
-              </button>
-
-              <p className="mt-3 text-center text-[11px] text-slate-500">
-                Bid increment: {(baseAmount)}
-              </p>
-
-            </div> 
-            }
+            
 
 
             {/* Bid history */}
