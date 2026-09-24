@@ -72,16 +72,75 @@ const handleCallClick = () => {
 };
 
 useEffect(() => {
-    const newSocket = io(BACKEND_URL,{
-                transports: ["polling", "websocket"],
-                withCredentials: true,
-                reconnection: true,
-            });
+
+    const newSocket = io(BACKEND_URL, {
+            transports: ["websocket"], // 👈 prefer websocket only
+            withCredentials: true,
+      
+            reconnection: true,
+            reconnectionAttempts: Infinity,   // 👈 keep trying
+            reconnectionDelay: 1000,
+            reconnectionDelayMax: 5000,
+          });
     setSocket(newSocket);
-    
-    return () => {
-      newSocket.disconnect();
-    };
+
+
+    newSocket.on("connect", () => {
+            console.log("Connected:", newSocket.id);
+             newSocket.emit("join-room", roomId);
+          });
+      
+          newSocket.on("disconnect", (reason) => {
+            console.log("Disconnected:", reason);
+          });
+      
+          newSocket.on("reconnect_attempt", () => {
+            console.log("Reconnecting...");
+          });
+      
+          newSocket.on("reconnect", () => {
+            console.log("Reconnected!");
+            newSocket.emit("join-room", roomId);
+          });
+          const handleFocus = () => {
+            if (!newSocket.connected) {
+              console.log("Focus reconnect...");
+              newSocket.connect();
+              newSocket.emit("join-room", roomId);
+            }
+          };
+      
+          const interval = setInterval(() => {
+            if (!newSocket.connected) {
+              console.log("Heartbeat reconnect...");
+              newSocket.connect();
+              newSocket.emit("join-room", roomId);
+            }
+          }, 5000);
+      
+      
+          // ✅ 🔥 HANDLE MOBILE SCREEN OFF / ON
+          const handleVisibilityChange = () => {
+            if (document.visibilityState === "visible") {
+              console.log("App came back to foreground");
+              console.log(newSocket.connected);
+              if (!newSocket.connected) {
+                console.log("Manually reconnecting...");
+                newSocket.connect();
+                newSocket.emit("join-room", roomId);
+              }
+            }
+          };
+      
+          document.addEventListener("visibilitychange", handleVisibilityChange);
+      
+          return () => {
+            clearInterval(interval);
+            window.removeEventListener("focus", handleFocus);
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
+            newSocket.off();
+            newSocket.disconnect();
+          };
   }, []);
 
   const parseData = (data: any) => {
@@ -191,7 +250,7 @@ useEffect(() => {
     const addAuctionState = async(params:any)=>{
 
       let data = {
-        current_player_id : params.id,
+        current_player_id : params?.id,
         status : 'BIDDING'
       }
 
@@ -223,7 +282,7 @@ useEffect(() => {
               let response = await TeamService().getBidHistory(playerId);
               console.log("bid history response== ", response?.data);
               setBidHistory(response?.data);
-              setCurrentBid(response?.data?.[0])
+              // setCurrentBid(response?.data?.[0])
             //   let nextBid = response?.data?.[0].bid_amount + baseAmount
             //   setNextBid(nextBid);
     
