@@ -574,7 +574,7 @@ const LiveAuctionTeam: React.FC = () => {
 
 
       {soldPlayer?.id && (
-        <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
             <div className="sold-stamp">
             SOLD
             </div>
@@ -582,7 +582,7 @@ const LiveAuctionTeam: React.FC = () => {
         )}
 
         {unSoldPlayer?.id && (
-        <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center">
+       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
             <div className="unsold-stamp">
             UNSOLD
             </div>
