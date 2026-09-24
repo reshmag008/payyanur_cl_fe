@@ -55,239 +55,374 @@ const PlayerCard = ({ player }: PlayerCardProps) => {
 
   return (
     <>
-      
-<div className="group bg-card rounded-2xl border border-border overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
-
-  {/* Player Image */}
-  <div className="relative h-52 sm:h-64 bg-gradient-to-br from-indigo-500/20 via-purple-500/10 to-pink-500/20 flex items-center justify-center overflow-hidden">
-
-    {player.profile_image ? (
-      <img
-        src={`https://storage.googleapis.com/rajas_pl/${player.profile_image}`}
-        alt={player.fullname}
-        className="w-full h-full object-contain p-2 transition-transform duration-300 group-hover:scale-[1.02]"
-      />
-    ) : (
-      <div className="w-full h-full flex items-center justify-center">
-        <div className="w-24 h-24 rounded-full bg-gradient-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center">
-          <User className="w-14 h-14 text-indigo-400/60" />
-        </div>
-      </div>
-    )}
-
-    {/* Bottom gradient */}
-    <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
-
-    {/* Player Number */}
-    <div className="
-      absolute top-3 left-3
-      w-10 h-10
-      rounded-full
-      bg-gradient-to-br from-indigo-600 to-purple-600
-      text-white
-      flex items-center justify-center
-      text-sm font-bold
-      shadow-lg
-      border border-white/20
-    ">
-      {player.id}
-    </div>
-
-    {/* Role Badge */}
-    <div
-      className={`
-        absolute top-3 right-3
-        px-3 py-1.5
-        rounded-full
-        text-[11px]
-        font-bold
-        shadow-lg
-        backdrop-blur-sm
-        border border-white/20
-        ${getRoleBadgeColor(player.player_role)}
-      `}
-    >
-      {player.player_role}
-    </div>
-
-    {/* Player Name */}
-    <div className="absolute bottom-3 left-4 right-4">
-      <h3 className="
-        font-heading
-        font-bold
-        text-lg sm:text-xl
-        text-white
-        truncate
-        drop-shadow-lg
-      ">
-        {player.fullname}
-      </h3>
-    </div>
-  </div>
 
 
-  {/* Player Details */}
-  <div className="p-4 sm:p-5">
+    {/* <div className="w-full max-w-sm mx-auto">
+  <div className="
+    relative overflow-hidden
+    rounded-2xl
+    bg-black
+    border-2 border-yellow-600
+    shadow-2xl
+  ">
 
-    {/* Location */}
-    {player.location && (
-      <div className="
-        flex items-center gap-3
-        rounded-xl
-        px-3 py-2.5
-        mb-2
-        bg-gradient-to-r from-blue-500/10 to-cyan-500/10
-        border border-blue-500/15
-      ">
-        <div className="
-          w-8 h-8
-          rounded-lg
-          bg-blue-500
-          flex items-center justify-center
-          flex-shrink-0
-          shadow-sm
-        ">
-          <MapPin className="w-4 h-4 text-white" />
-        </div>
+    <div className="absolute inset-1 rounded-xl border border-yellow-400/60 pointer-events-none z-20" />
 
-        <div className="min-w-0">
-          <p className="text-[9px] uppercase tracking-wider text-blue-600 dark:text-blue-400 font-bold">
-            Location
-          </p>
-          <span className="text-sm text-foreground font-medium truncate block">
-            {player.location}
-          </span>
-        </div>
-      </div>
-    )}
+    <div className="relative h-[390px] bg-gray-950 overflow-hidden">
 
-
-    {/* Contact Number */}
-    {player.contact_no && (
-      <div className="
-        flex items-center gap-3
-        rounded-xl
-        px-3 py-2.5
-        mb-4
-        bg-gradient-to-r from-emerald-500/10 to-green-500/10
-        border border-emerald-500/15
-      ">
-        <div className="
-          w-8 h-8
-          rounded-lg
-          bg-emerald-500
-          flex items-center justify-center
-          flex-shrink-0
-          shadow-sm
-        ">
-          <Phone className="w-4 h-4 text-white" />
-        </div>
-
-        <div className="min-w-0">
-          <p className="text-[9px] uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-bold">
-            Contact
-          </p>
-          <span className="text-sm text-foreground font-medium truncate block">
-            {player.contact_no}
-          </span>
-        </div>
-      </div>
-    )}
-
-
-    {/* Player Attributes */}
-    <div className="grid grid-cols-2 gap-3">
-
-      {/* Batting */}
-      {player.batting_style && (
-        <div className="
-          relative overflow-hidden
-          rounded-xl
-          p-3
-          bg-gradient-to-br from-orange-500 to-red-500
-          text-white
-          shadow-md
-          shadow-orange-500/20
-        ">
-
-          {/* Decorative circle */}
-          <div className="
-            absolute -right-5 -top-5
-            w-16 h-16
-            rounded-full
-            bg-white/10
-          " />
-
-          <div className="relative z-10">
-            <div className="
-              w-8 h-8
-              rounded-lg
-              bg-white/20
-              flex items-center justify-center
-              mb-2
-            ">
-              <Crosshair className="w-4 h-4" />
-            </div>
-
-            <p className="text-[9px] uppercase tracking-wider text-white/70 font-bold">
-              Batting
-            </p>
-
-            <p className="text-xs sm:text-sm font-bold truncate mt-0.5">
-              {player.batting_style}
-            </p>
-          </div>
+      {player.profile_image ? (
+        <img
+          src={`https://storage.googleapis.com/rajas_pl/${player.profile_image}`}
+          alt={player.fullname}
+          className="
+            absolute inset-0
+            w-full h-full
+            object-contain
+          "
+        />
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-900">
+          <User className="w-24 h-24 text-gray-600" />
         </div>
       )}
 
+      <div className="
+        absolute inset-0
+        bg-gradient-to-t
+        from-black via-black/20 to-black/10
+      " />
 
-      {/* Bowling */}
-      {player.bowling_style &&
-        player.bowling_style !== "None" && (
-          <div className="
-            relative overflow-hidden
-            rounded-xl
-            p-3
-            bg-gradient-to-br from-violet-500 to-purple-600
+      <div className="
+        absolute inset-3
+        border-2 border-yellow-500/70
+        pointer-events-none
+      " />
+
+      <div className="
+        absolute top-5 right-5
+        w-11 h-11
+        rounded-full
+        bg-black
+        border-2 border-yellow-400
+        flex items-center justify-center
+        text-yellow-300
+        text-sm font-bold
+        shadow-lg
+      ">
+        {player.id}
+      </div>
+
+      <div className="
+        absolute
+        bottom-4
+        left-4 right-4
+        grid grid-cols-3
+        gap-2
+      ">
+
+        <div className="
+          bg-black/90
+          border border-yellow-500
+          rounded-lg
+          px-2 py-2
+          text-center
+        ">
+          <p className="text-[9px] text-yellow-400 uppercase font-bold">
+            Role
+          </p>
+
+          <p className="
+            text-[10px]
             text-white
-            shadow-md
-            shadow-purple-500/20
+            font-bold
+            truncate
+            mt-1
           ">
+            {player.player_role || "-"}
+          </p>
+        </div>
 
-            {/* Decorative circle */}
-            <div className="
-              absolute -right-5 -top-5
-              w-16 h-16
-              rounded-full
-              bg-white/10
-            " />
 
-            <div className="relative z-10">
-              <div className="
-                w-8 h-8
-                rounded-lg
-                bg-white/20
-                flex items-center justify-center
-                mb-2
-              ">
-                <Target className="w-4 h-4" />
-              </div>
+        <div className="
+          bg-black/90
+          border border-yellow-500
+          rounded-lg
+          px-2 py-2
+          text-center
+        ">
+          <p className="text-[9px] text-yellow-400 uppercase font-bold">
+            Batting
+          </p>
 
-              <p className="text-[9px] uppercase tracking-wider text-white/70 font-bold">
-                Bowling
-              </p>
+          <p className="
+            text-[10px]
+            text-white
+            font-bold
+            truncate
+            mt-1
+          ">
+            {player.batting_style || "-"}
+          </p>
+        </div>
 
-              <p className="text-xs sm:text-sm font-bold truncate mt-0.5">
-                {player.bowling_style}
-              </p>
-            </div>
-          </div>
-        )}
+
+        <div className="
+          bg-black/90
+          border border-yellow-500
+          rounded-lg
+          px-2 py-2
+          text-center
+        ">
+          <p className="text-[9px] text-yellow-400 uppercase font-bold">
+            Bowling
+          </p>
+
+          <p className="
+            text-[10px]
+            text-white
+            font-bold
+            truncate
+            mt-1
+          ">
+            {player.bowling_style &&
+            player.bowling_style !== "None"
+              ? player.bowling_style
+              : "-"}
+          </p>
+        </div>
+
+      </div>
 
     </div>
 
+
+    <div className="
+      relative
+      mx-4
+      -mt-1
+      z-10
+      px-4 py-3
+      bg-black
+      border-2 border-yellow-500
+      text-center
+    ">
+
+      <div className="
+        absolute left-0 top-1/2
+        -translate-x-1/2
+        w-3 h-3
+        rotate-45
+        bg-yellow-500
+      " />
+
+      <div className="
+        absolute right-0 top-1/2
+        translate-x-1/2
+        w-3 h-3
+        rotate-45
+        bg-yellow-500
+      " />
+
+      <h2 className="
+        text-xl
+        sm:text-2xl
+        font-black
+        uppercase
+        tracking-wide
+        text-yellow-400
+        truncate
+      ">
+        {player.fullname}
+      </h2>
+
+    </div>
+
+
+    <div className="px-5 py-4">
+
+      <div className="
+        flex items-center
+        justify-between
+        gap-4
+      ">
+
+        {player.location && (
+          <div className="flex items-center gap-2 min-w-0">
+
+            <div className="
+              w-8 h-8
+              rounded-full
+              bg-yellow-500
+              flex items-center
+              justify-center
+              flex-shrink-0
+            ">
+              <MapPin className="w-4 h-4 text-black" />
+            </div>
+
+            <div className="min-w-0">
+              <p className="
+                text-[8px]
+                uppercase
+                text-yellow-500
+                font-bold
+              ">
+                Location
+              </p>
+
+              <p className="
+                text-xs
+                text-white
+                font-semibold
+                truncate
+              ">
+                {player.location}
+              </p>
+            </div>
+
+          </div>
+        )}
+
+
+        {player.contact_no && (
+          <div className="flex items-center gap-2 min-w-0">
+
+            <div className="
+              w-8 h-8
+              rounded-full
+              bg-yellow-500
+              flex items-center
+              justify-center
+              flex-shrink-0
+            ">
+              <Phone className="w-4 h-4 text-black" />
+            </div>
+
+            <div className="min-w-0">
+              <p className="
+                text-[8px]
+                uppercase
+                text-yellow-500
+                font-bold
+              ">
+                Contact
+              </p>
+
+              <p className="
+                text-xs
+                text-white
+                font-semibold
+                truncate
+              ">
+                {player.contact_no}
+              </p>
+            </div>
+
+          </div>
+        )}
+
+      </div>
+
+    </div>
+
+
+    
+
+    <div className="
+      h-1
+      bg-yellow-500
+    " />
+
   </div>
+</div> */}
+      
+<div className="group relative overflow-hidden rounded-2xl border-4 border-emerald-600 bg-white shadow-md">
+
+  {/* Player Image */}
+  <div className="relative h-80 w-full overflow-hidden bg-slate-100">
+
+    <img
+      src={`https://storage.googleapis.com/rajas_pl/${player.profile_image}`}
+      alt={player.fullname}
+      className="h-full w-full object-contain object-top"
+    />
+
+    {/* Dark gradient for overlay readability */}
+    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+
+    {/* Player ID */}
+    <div className="absolute left-3 top-3 rounded-lg bg-slate-900/90 px-3 py-1.5 text-sm font-bold text-white">
+      #{player.id}
+    </div>
+
+    {/* Player Details Overlay */}
+    <div className="absolute bottom-4 left-3 right-3">
+
+      <div className="grid grid-cols-3 gap-2">
+
+        {/* Role */}
+        <div className="rounded-lg bg-white/90 px-2 py-2 text-center backdrop-blur-sm">
+          <p className="text-[9px] font-semibold uppercase text-slate-500">
+            Role
+          </p>
+          <p className="truncate text-xs font-bold text-slate-900">
+            {player.player_role}
+          </p>
+        </div>
+
+        {/* Batting */}
+        <div className="rounded-lg bg-white/90 px-2 py-2 text-center backdrop-blur-sm">
+          <p className="text-[9px] font-semibold uppercase text-slate-500">
+            Batting
+          </p>
+          <p className="truncate text-xs font-bold text-slate-900">
+            {player.batting_style}
+          </p>
+        </div>
+
+        {/* Bowling */}
+        <div className="rounded-lg bg-white/90 px-2 py-2 text-center backdrop-blur-sm">
+          <p className="text-[9px] font-semibold uppercase text-slate-500">
+            Bowling
+          </p>
+          <p className="truncate text-xs font-bold text-slate-900">
+            {player.bowling_style}
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  {/* Player Information */}
+  <div className="px-4 py-3">
+
+    <h3 className="truncate text-lg font-bold uppercase text-slate-900">
+      {player.fullname}
+    </h3>
+
+    <div className="mt-1 flex items-center gap-4 text-sm text-slate-500">
+
+    {/* Phone */}
+    <div className="flex items-center gap-1.5 font-bold">
+      <span>📞</span>
+      <span>{player.contact_no}</span>
+    </div>
+
+    {/* Location */}
+    <div className="flex min-w-0 items-center gap-1.5 font-bold">
+      <span>📍</span>
+      <span className="truncate">
+        {player.location}
+      </span>
+    </div>
+
+  </div>
+
+  </div>
+
 </div>
+
 
 
 

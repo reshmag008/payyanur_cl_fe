@@ -172,7 +172,7 @@ const [approvingPlayerId, setApprovingPlayerId] = useState<number | null>(null);
           </div>
 
           
-          {/* <div className="flex flex-col sm:flex-row items-center sm:gap-6">
+          <div className="flex flex-col sm:flex-row items-center sm:gap-6">
 
             {allTeams && allTeams.length>0 && (
                 <select
@@ -216,7 +216,7 @@ const [approvingPlayerId, setApprovingPlayerId] = useState<number | null>(null);
 
                   <PDFCreator playerList={players} teamName={selectedTeamName}/>
 
-      </div>*/}
+      </div>
 
 
         </div>

@@ -158,6 +158,7 @@ useEffect(() => {
             console.log("messageData== ", messageData)
             setCurrentBid(messageData);
             setStatus("BIDDING");
+            setCallStage("1st Call")
             GetBidHistory(messageData?.player_id)
           })
 

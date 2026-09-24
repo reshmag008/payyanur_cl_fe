@@ -40,124 +40,328 @@ const PDFCreator: React.FC<props> = ({playerList,teamName}) => {
     let pageNumber = 1;
 
     for (const player of playerList) {
-        // Fetch the profile image and convert it to base64 if needed
-        const profileImageUrl = `https://storage.googleapis.com/rajas_pl/${player.profile_image}`;
-        // <img key={index} src={BACKEND_URL + '/player_images/' + player.profile_image} alt="logo" style={profileImageStyle}/> */}
-        const profileImageBase64 = await fetch(profileImageUrl)
+    const profileImageUrl = `https://storage.googleapis.com/rajas_pl/${player.profile_image}`;
+
+    // Convert profile image to base64
+    let profileImageBase64 = "";
+
+    try {
+        profileImageBase64 = await fetch(profileImageUrl)
             .then((res) => res.blob())
-            .then((blob) => new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.readAsDataURL(blob);
-            }));
-
-        // Create a temporary div to render each player's content
-        const tempDiv = document.createElement("div");
-        tempDiv.style.width = `${contentWidth * 3}px`; // Increase width for higher-res canvas
-        tempDiv.style.height = `${contentHeight * 5}px`; // Increase height for higher-res canvas
-        tempDiv.style.marginTop = '20px';
-        tempDiv.style.display = 'flex';
-        tempDiv.style.justifyContent = 'center';
-        tempDiv.style.alignItems = 'center';
-        tempDiv.style.backgroundColor = 'white';
-        tempDiv.style.overflow = "hidden";
-
-        // Set card styles and content
-        tempDiv.innerHTML = `
-            <div style="
-                border: 1px solid #ccc; 
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-                border-radius: 8px;
-                width: 100%; 
-                height: 100%;
-                background-image: url(${playerBg});
-                background-size: cover;
-                background-position: center;
-                
-                ">
-
-
-
-                <div style="display:flex">
-                    <img src="${profileImageBase64}" alt="Player Image" style="height: 18.1rem; width: 12.8rem; margin-left: 32px; object-fit: cover; margin-top: 328px; border-radius:10px;
-                    mask-composite: intersect;" />
-                </div>
-
-                <div style="text-align:left;">
-                    <p style="margin-top:-600px; margin-left:40px; font-size: 40px; color: black; font-weight:bold;">${player.id}</p>
-                </div>
-
-
-                <div style="text-align:left">
-                    <p style="margin-top:585px; font-size: 21px; color:black; font-weight:bold;padding-left:310px;">${player.player_role}</p>
-                </div>
-
-                
-               <div style="text-align:left">
-                    <p style="margin-top:1px; font-size: 21px; color:black; font-weight:bold;padding-left:310px;">${player.batting_style}</p>
-                </div>
-
-                
-                <div style="text-align:left">
-                    <p style="margin-top:-10px; font-size: 21px; color:black; font-weight:bold;padding-left:310px;">${player.bowling_style}</p>
-                </div>
-
-                
-                <div style="text-align:left">
-                    <p style="margin-top:-7px; font-size: 21px; color:black; font-weight:bold;padding-left:310px;">${capitalizeFirst(player.location)}</p>
-                </div>
-
-                <div style="text-align:left">
-                    <p style="margin-top:-7px; font-size: 21px; color:black; font-weight:bold;margin-left:310px;">${player.contact_no}</p>
-                </div>
-
-                 <div style="text-align:left">
-                    <p style="margin-top:2px; margin-left:40px; font-size: 21px; color:white; font-weight:bold;">${player.fullname.toUpperCase()}</p>
-                </div>
-
-                ${player.bid_amount ? `
-                <div style="text-align:left";>
-                    <img
-                        src="${soldImg}"
-                        alt="${player.fullname}"
-                        style="width:120px; height:120px; object-fit:cover;margin-left:480px;margin-top:-150px;"
-                    />
-
-                    <p style="margin-top:-60px; margin-left:523px; font-size:12px; color:black; font-weight:bold;">
-                        ${player.bid_amount}
-                    </p>
-                </div>
-                ` : ""}
-
-                
-            </div>
-        `;
-        
-
-        document.body.appendChild(tempDiv);
-
-        // Capture the temporary content as an image
-        const canvas = await html2canvas(tempDiv, { scale: 1.2, useCORS: true,allowTaint: false, }); // Scale for better quality
-        const imgData = canvas.toDataURL('image/jpeg', 0.7);
-        const imgWidth = contentWidth; // Width to fit within margins
-        const imgHeight = (canvas.height * imgWidth) / canvas.width; // Preserve aspect ratio
-
-        // Add the captured image to the PDF within margins
-        if (pageNumber > 1) pdf.addPage();
-        pdf.addImage(imgData, 'JPEG', margin, margin, imgWidth, imgHeight);
-
-        // Optional: Add footer with page number
-        pdf.setFontSize(10);
-        pdf.setTextColor(150);
-        // pdf.text(`Page ${pageNumber}`, pageWidth / 2, pageHeight - 10, { align: 'center' });
-        pageNumber++;
-
-        // Remove the temporary div
-        document.body.removeChild(tempDiv);
+            .then(
+                (blob) =>
+                    new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = () => resolve(reader.result);
+                        reader.readAsDataURL(blob);
+                    })
+            );
+    } catch (error) {
+        console.error("Failed to load player image:", error);
     }
 
+    const tempDiv = document.createElement("div");
+
+    // PDF rendering size
+    tempDiv.style.width = "600px";
+    tempDiv.style.height = "850px";
+    tempDiv.style.backgroundColor = "#ffffff";
+    tempDiv.style.display = "flex";
+    tempDiv.style.justifyContent = "center";
+    tempDiv.style.alignItems = "center";
+    tempDiv.style.overflow = "hidden";
+
+    tempDiv.innerHTML = `
+    <div style="
+        width: 560px;
+        height: 810px;
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 16px;
+        overflow: hidden;
+        font-family: Arial, Helvetica, sans-serif;
+        position: relative;
+    ">
+
+        <!-- Player Image -->
+        <div style="
+            width: 100%;
+            height: 430px;
+            background: #e2e8f0;
+            overflow: hidden;
+            position: relative;
+        ">
+            ${
+                profileImageBase64
+                    ? `
+                <img
+                    src="${profileImageBase64}"
+                    style="
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        display: block;
+                    "
+                />
+                `
+                    : ""
+            }
+
+            <!-- Player Number -->
+            <div style="
+                position: absolute;
+                top: 16px;
+                left: 16px;
+                width: 48px;
+                height: 48px;
+                border-radius: 12px;
+                background: #0f172a;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 22px;
+                font-weight: 700;
+                color: #ffffff;
+            ">
+                ${player.id}
+            </div>
+        </div>
+
+
+        <!-- Player Details -->
+        <div style="
+            padding: 20px 22px;
+            background: #f8fafc;
+        ">
+
+            <!-- Name -->
+            <div style="
+    font-size: 25px;
+    line-height: 30px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 5px;
+    min-height: 60px;
+    max-height: 60px;
+    overflow: hidden;
+    word-break: break-word;
+">
+    ${player.fullname.toUpperCase()}
+</div>
+
+            <!-- Location -->
+            <div style="
+                font-size: 15px;
+                color: #64748b;
+                margin-bottom: 18px;
+            ">
+                ${capitalizeFirst(player.location || "")}
+            </div>
+
+
+            <!-- Player Info -->
+            <div style="
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            ">
+
+                <div style="
+                    border: 1px solid #cbd5e1;
+                    border-left: 4px solid #2563eb;
+                    border-radius: 10px;
+                    padding: 10px;
+                    background: #ffffff;
+                ">
+                    <div style="
+                        font-size: 10px;
+                        color: #64748b;
+                        margin-bottom: 4px;
+                        font-weight: 600;
+                    ">
+                        ROLE
+                    </div>
+
+                    <div style="
+                        font-size: 14px;
+                        font-weight: 600;
+                        color: #0f172a;
+                    ">
+                        ${player.player_role || "-"}
+                    </div>
+                </div>
+
+
+                <div style="
+                    border: 1px solid #cbd5e1;
+                    border-left: 4px solid #16a34a;
+                    border-radius: 10px;
+                    padding: 10px;
+                    background: #ffffff;
+                ">
+                    <div style="
+                        font-size: 10px;
+                        color: #64748b;
+                        margin-bottom: 4px;
+                        font-weight: 600;
+                    ">
+                        BATTING
+                    </div>
+
+                    <div style="
+                        font-size: 14px;
+                        font-weight: 600;
+                        color: #0f172a;
+                    ">
+                        ${player.batting_style || "-"}
+                    </div>
+                </div>
+
+
+                <div style="
+                    border: 1px solid #cbd5e1;
+                    border-left: 4px solid #9333ea;
+                    border-radius: 10px;
+                    padding: 10px;
+                    background: #ffffff;
+                ">
+                    <div style="
+                        font-size: 10px;
+                        color: #64748b;
+                        margin-bottom: 4px;
+                        font-weight: 600;
+                    ">
+                        BOWLING
+                    </div>
+
+                    <div style="
+                        font-size: 14px;
+                        font-weight: 600;
+                        color: #0f172a;
+                    ">
+                        ${player.bowling_style || "-"}
+                    </div>
+                </div>
+
+
+                <div style="
+                    border: 1px solid #cbd5e1;
+                    border-left: 4px solid #f59e0b;
+                    border-radius: 10px;
+                    padding: 10px;
+                    background: #ffffff;
+                ">
+                    <div style="
+                        font-size: 10px;
+                        color: #64748b;
+                        margin-bottom: 4px;
+                        font-weight: 600;
+                    ">
+                        CONTACT
+                    </div>
+
+                    <div style="
+                        font-size: 14px;
+                        font-weight: 600;
+                        color: #0f172a;
+                    ">
+                        ${player.contact_no || "-"}
+                    </div>
+                </div>
+
+            </div>
+
+
+            ${
+                player.bid_amount
+                    ? `
+                <!-- Sold -->
+                <div style="
+                    margin-top: 16px;
+                    height: 70px;
+                    border-radius: 12px;
+                    background: #fff7ed;
+                    border: 1px solid #fed7aa;
+                    display: flex;
+                    align-items: center;
+                    padding: 0 14px;
+                ">
+
+                    <img
+                        src="${soldImg}"
+                        style="
+                            width: 52px;
+                            height: 52px;
+                            object-fit: contain;
+                            margin-right: 12px;
+                        "
+                    />
+
+                    <div>
+                        <div style="
+                            font-size: 10px;
+                            color: #9a3412;
+                            font-weight: 600;
+                            margin-bottom: 3px;
+                        ">
+                            SOLD FOR
+                        </div>
+
+                        <div style="
+                            font-size: 22px;
+                            font-weight: 700;
+                            color: #9a3412;
+                        ">
+                            ₹${player.bid_amount}
+                        </div>
+                    </div>
+
+                </div>
+                `
+                    : ""
+            }
+
+        </div>
+    </div>
+`;
+
+    document.body.appendChild(tempDiv);
+
+    // Wait for images to render
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    const canvas = await html2canvas(tempDiv, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: false,
+        backgroundColor: "#ffffff"
+    });
+
+    const imgData = canvas.toDataURL("image/jpeg", 0.9);
+
+    const imgWidth = contentWidth;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    if (pageNumber > 1) {
+        pdf.addPage();
+    }
+
+    pdf.addImage(
+        imgData,
+        "JPEG",
+        margin,
+        margin,
+        imgWidth,
+        imgHeight
+    );
+
+    pageNumber++;
+
+    document.body.removeChild(tempDiv);
+}
+
     // Save the PDF
-    pdf.save(teamName ? teamName+'.pdf' : "All Kerala Monsoon CL Players.pdf");
+    pdf.save(teamName ? teamName+'.pdf' : "Payyannur Cricket League.pdf");
     setIsLoading(false)
 };
 
