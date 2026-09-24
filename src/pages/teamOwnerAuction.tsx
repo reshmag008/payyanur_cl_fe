@@ -991,18 +991,21 @@ const LiveAuctionTeam: React.FC = () => {
 
             {/* Team / Auctioned Players Section */}
 
+          </aside>
 
-<div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-[#0b0b0f] shadow-2xl">
+
+          <div className="mt-6 w-full overflow-hidden rounded-2xl border border-white/10 bg-[#0b0b0f] shadow-2xl">
 
   {/* Tabs */}
   <div className="border-b border-white/10 bg-black/50">
-    <div className="flex">
+    <div className="grid grid-cols-2">
 
+      {/* Teams Tab */}
       <button
         type="button"
         onClick={() => setActiveTab("teams")}
         className={`
-          relative flex-1 px-4 py-4 text-sm font-bold transition-all
+          relative min-w-0 px-3 py-3.5 text-sm font-bold transition-all sm:px-4 sm:py-4
           ${
             activeTab === "teams"
               ? "bg-white/[0.04] text-white"
@@ -1011,25 +1014,29 @@ const LiveAuctionTeam: React.FC = () => {
         `}
       >
         <div className="flex items-center justify-center gap-2">
-          <Users className="h-4 w-4" />
-          <span>Teams</span>
+          <Users className="h-4 w-4 flex-shrink-0" />
 
-          <span className="flex h-5 min-w-[22px] items-center justify-center rounded-full bg-white/10 px-1.5 text-[10px]">
+          <span className="truncate">
+            Teams
+          </span>
+
+          <span className="flex h-5 min-w-[22px] flex-shrink-0 items-center justify-center rounded-full bg-white/10 px-1.5 text-[10px]">
             {allTeams?.length || 0}
           </span>
         </div>
 
         {activeTab === "teams" && (
-          <span className="absolute bottom-0 left-6 right-6 h-[2px] bg-yellow-400" />
+          <span className="absolute bottom-0 left-4 right-4 h-[2px] bg-yellow-400 sm:left-6 sm:right-6" />
         )}
       </button>
 
 
+      {/* Players Tab */}
       <button
         type="button"
         onClick={() => setActiveTab("players")}
         className={`
-          relative flex-1 px-4 py-4 text-sm font-bold transition-all
+          relative min-w-0 px-3 py-3.5 text-sm font-bold transition-all sm:px-4 sm:py-4
           ${
             activeTab === "players"
               ? "bg-white/[0.04] text-white"
@@ -1038,16 +1045,19 @@ const LiveAuctionTeam: React.FC = () => {
         `}
       >
         <div className="flex items-center justify-center gap-2">
-          <Trophy className="h-4 w-4" />
-          <span>Auctioned Players</span>
+          <Trophy className="h-4 w-4 flex-shrink-0" />
 
-          <span className="flex h-5 min-w-[22px] items-center justify-center rounded-full bg-white/10 px-1.5 text-[10px]">
+          <span className="truncate">
+            Auctioned Players
+          </span>
+
+          <span className="flex h-5 min-w-[22px] flex-shrink-0 items-center justify-center rounded-full bg-white/10 px-1.5 text-[10px]">
             {auctionedPlayers?.length || 0}
           </span>
         </div>
 
         {activeTab === "players" && (
-          <span className="absolute bottom-0 left-6 right-6 h-[2px] bg-yellow-400" />
+          <span className="absolute bottom-0 left-4 right-4 h-[2px] bg-yellow-400 sm:left-6 sm:right-6" />
         )}
       </button>
 
@@ -1056,13 +1066,15 @@ const LiveAuctionTeam: React.FC = () => {
 
 
   {/* Content */}
-  <div className="p-4 sm:p-6">
+  <div className="w-full p-4 sm:p-6">
 
-    {/* Teams */}
+    {/* ================= TEAMS ================= */}
     {activeTab === "teams" && (
-      <>
-        <div className="mb-5 flex items-center justify-between">
-          <div>
+      <div>
+
+        <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+
+          <div className="min-w-0">
             <h2 className="text-lg font-bold text-white">
               Teams
             </h2>
@@ -1072,24 +1084,63 @@ const LiveAuctionTeam: React.FC = () => {
             </p>
           </div>
 
-          <span className="rounded-lg border border-yellow-400/20 bg-yellow-400/10 px-3 py-1.5 text-xs font-bold text-yellow-400">
+          <span className="w-fit flex-shrink-0 rounded-lg border border-yellow-400/20 bg-yellow-400/10 px-3 py-1.5 text-xs font-bold text-yellow-400">
             {allTeams?.length || 0} Teams
           </span>
+
         </div>
 
 
         {allTeams?.length > 0 ? (
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+
+          <div className="
+            grid
+            grid-cols-1
+            gap-3
+            sm:grid-cols-2
+            xl:grid-cols-3
+          ">
 
             {allTeams.map((team) => (
+
               <div
                 key={team.id}
-                className="group flex items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.03] p-4 transition-all hover:border-yellow-400/20 hover:bg-white/[0.06]"
+                className="
+                  flex
+                  min-w-0
+                  items-center
+                  gap-3
+                  rounded-xl
+                  border
+                  border-white/[0.08]
+                  bg-white/[0.03]
+                  p-4
+                  transition-all
+                  hover:border-yellow-400/20
+                  hover:bg-white/[0.06]
+                "
               >
-                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl border border-yellow-400/20 bg-yellow-500/10 font-black text-yellow-400">
+
+                {/* Team Icon */}
+                <div className="
+                  flex
+                  h-11
+                  w-11
+                  flex-shrink-0
+                  items-center
+                  justify-center
+                  rounded-xl
+                  border
+                  border-yellow-400/20
+                  bg-yellow-500/10
+                  font-black
+                  text-yellow-400
+                ">
                   {team.team_name?.charAt(0)?.toUpperCase()}
                 </div>
 
+
+                {/* Team Name */}
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-bold text-gray-100">
                     {team.team_name}
@@ -1100,33 +1151,43 @@ const LiveAuctionTeam: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="flex-shrink-0 text-right">
+
+                {/* Max Bid */}
+                <div className="w-[90px] flex-shrink-0 text-right">
                   <p className="text-[9px] uppercase tracking-wider text-gray-600">
                     Max Bid
                   </p>
 
-                  <p className="mt-0.5 text-sm font-black text-yellow-400">
+                  <p className="mt-0.5 truncate text-sm font-black text-yellow-400">
                     ₹{Number(team.max_bid_amount || 0).toLocaleString("en-IN")}
                   </p>
                 </div>
+
               </div>
+
             ))}
 
           </div>
+
         ) : (
+
           <div className="py-12 text-center text-sm text-gray-600">
             No teams available
           </div>
+
         )}
-      </>
+
+      </div>
     )}
 
 
-    {/* Auctioned Players */}
+    {/* ================= AUCTIONED PLAYERS ================= */}
     {activeTab === "players" && (
-      <>
-        <div className="mb-5 flex items-center justify-between">
-          <div>
+      <div>
+
+        <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+
+          <div className="min-w-0">
             <h2 className="text-lg font-bold text-white">
               Auctioned Players
             </h2>
@@ -1136,38 +1197,78 @@ const LiveAuctionTeam: React.FC = () => {
             </p>
           </div>
 
-          <span className="rounded-lg border border-green-400/20 bg-green-400/10 px-3 py-1.5 text-xs font-bold text-green-400">
+          <span className="w-fit flex-shrink-0 rounded-lg border border-green-400/20 bg-green-400/10 px-3 py-1.5 text-xs font-bold text-green-400">
             {auctionedPlayers?.length || 0} Players
           </span>
+
         </div>
 
 
         {auctionedPlayers?.length > 0 ? (
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+
+          <div className="
+            grid
+            grid-cols-1
+            gap-3
+            sm:grid-cols-2
+            xl:grid-cols-3
+          ">
 
             {auctionedPlayers.map((player) => (
+
               <div
                 key={player.id}
-                className="group flex items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.03] p-3 transition-all hover:border-yellow-400/20 hover:bg-white/[0.06]"
+                className="
+                  grid
+                  min-w-0
+                  grid-cols-[56px_minmax(0,1fr)_90px]
+                  items-center
+                  gap-3
+                  rounded-xl
+                  border
+                  border-white/[0.08]
+                  bg-white/[0.03]
+                  p-3
+                  transition-all
+                  hover:border-yellow-400/20
+                  hover:bg-white/[0.06]
+                "
               >
+
                 {/* Image */}
-                <div className="h-14 w-14 flex-shrink-0 overflow-hidden rounded-xl border border-white/10 bg-white/[0.05]">
+                <div className="
+                  h-14
+                  w-14
+                  flex-shrink-0
+                  overflow-hidden
+                  rounded-xl
+                  border
+                  border-white/10
+                  bg-white/[0.05]
+                ">
+
                   {player.profile_image ? (
+
                     <img
                       src={`https://storage.googleapis.com/rajas_pl/${player.profile_image}`}
                       alt={player.fullname}
                       className="h-full w-full object-cover"
                     />
+
                   ) : (
+
                     <div className="flex h-full w-full items-center justify-center">
                       <User className="h-7 w-7 text-gray-600" />
                     </div>
+
                   )}
+
                 </div>
 
 
                 {/* Details */}
-                <div className="min-w-0 flex-1">
+                <div className="min-w-0">
+
                   <p className="truncate text-sm font-bold text-gray-100">
                     {player.fullname}
                   </p>
@@ -1181,44 +1282,50 @@ const LiveAuctionTeam: React.FC = () => {
                       {player.team_name}
                     </p>
                   )}
+
                 </div>
 
 
                 {/* Bid */}
-                {player.bid_amount && (
-                  <div className="flex-shrink-0 text-right">
-                    <p className="text-[9px] uppercase tracking-wider text-gray-600">
-                      Sold
-                    </p>
+                <div className="w-[90px] min-w-0 flex-shrink-0 text-right">
 
-                    <p className="mt-0.5 text-sm font-black text-green-400">
-                      ₹{Number(player.bid_amount).toLocaleString("en-IN")}
-                    </p>
-                  </div>
-                )}
+                  {player.bid_amount ? (
+                    <>
+                      <p className="text-[9px] uppercase tracking-wider text-gray-600">
+                        Sold
+                      </p>
+
+                      <p className="mt-0.5 truncate text-sm font-black text-green-400">
+                        ₹{Number(player.bid_amount).toLocaleString("en-IN")}
+                      </p>
+                    </>
+                  ) : (
+                    <span className="text-xs text-gray-600">
+                      -
+                    </span>
+                  )}
+
+                </div>
 
               </div>
+
             ))}
 
           </div>
+
         ) : (
+
           <div className="py-12 text-center text-sm text-gray-600">
             No players auctioned yet
           </div>
+
         )}
-      </>
+
+      </div>
     )}
 
   </div>
 </div>
-
-
-
-
-
-
-
-          </aside>
 
         </div>
 
