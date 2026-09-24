@@ -189,7 +189,10 @@ const LiveAuctionTeam: React.FC = () => {
             // setCurrentBid(message)
             setCurrentBid(messageData);
             GetBidHistory(currentBidPlayer)
-            setButtonDisable(false)
+            setButtonDisable(false);
+            if(nextbid > teamData.max_bid_amount){
+              setButtonDisable(true);
+            }
           })
 
           // socket.on('time_left', (timer: any) => {
